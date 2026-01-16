@@ -86,7 +86,6 @@ def update_power(id):
     if 'description' not in data:
         return jsonify({"errors": ["description is required"]}), 400
     
-    # Update the description
     power.description = data['description']
     db.session.commit()
         
@@ -101,17 +100,14 @@ def update_power(id):
 def create_hero_power():
     data = request.get_json()
     
-    # Validate required fields
     required_fields = ['strength', 'power_id', 'hero_id']
     for field in required_fields:
         if field not in data:
             return jsonify({"errors": [f"{field} is required"]}), 400
     
-    # Check if hero and power exist
     hero = Hero.query.get(data['hero_id'])
     power = Power.query.get(data['power_id'])
     
-    # Validate strength value
     valid_strengths = ['Strong', 'Weak', 'Average']
     if data['strength'] not in valid_strengths:
         return jsonify({"errors": [f"strength must be one of: {', '.join(valid_strengths)}"]}), 422
@@ -125,7 +121,6 @@ def create_hero_power():
     db.session.add(hero_power)
     db.session.commit()
         
-    # Return the response as specified
     return jsonify({
         "id": hero_power.id,
         "hero_id": hero_power.hero_id,
